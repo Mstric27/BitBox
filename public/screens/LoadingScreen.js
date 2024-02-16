@@ -21,7 +21,7 @@ export default function LoadingScreen({ route }) {
   useEffect(() => {
     const uploadImage = async () => {
       const file = await FileSystem.uploadAsync(
-        "https://59bb-107-144-156-227.ngrok-free.app/image-upload",
+        " %here% /image-upload",
         uri,
         {
           httpMethod: "POST",
@@ -32,7 +32,7 @@ export default function LoadingScreen({ route }) {
       const filename = file.body;
 
       const indentitfiedGameData = await fetch(
-        `https://59bb-107-144-156-227.ngrok-free.app/get-game-data/${filename}`
+        ` %here% /get-game-data/${filename}`
       );
 
       const boardgameData = await indentitfiedGameData.json();
