@@ -28,6 +28,8 @@ npm install
 Make a Microsoft Azure account and create a resource group with Azure's Computer Vision services, you must also go to https://www.customvision.ai and create a new project. In your Custom Vision project create and train a model for object detection.
 Finally, paste all of the required keys and endpoints to the corresponding variables in the .env file. 
 
+Additionally, go to https://firebase.google.com/ and create a new project. Add a web app to the project and copy the FirebaseConfig info into ./public/Firebase.js .
+
 Open three terminal windows in the same BitBox directory. Enter one of these commands for each window:
 
 npm start
