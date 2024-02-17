@@ -7,13 +7,7 @@ import * as firebase from "firebase/compat";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBdjntp828rqenP9m3A7WPbShMTPI3tyUU",
-  authDomain: "bitbox-b97b0.firebaseapp.com",
-  projectId: "bitbox-b97b0",
-  storageBucket: "bitbox-b97b0.appspot.com",
-  messagingSenderId: "918793422298",
-  appId: "1:918793422298:web:294a1ef838900170662ce3",
-  measurementId: "G-C1M39HEJK5",
+  // ADD FIREBASE CONFIG INFO HERE
 };
 
 // Initialize Firebase
