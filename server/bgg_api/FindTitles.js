@@ -48,14 +48,18 @@ async function checkTitles(potentialTitles) {
       );
       const data = await res.text();
       return new Promise((resolve, reject) => {
-        parseString(data, (err, Eresult) => {
-          if (err) {
-            reject(err);
-          } else {
-            const resultCount = parseInt(Eresult["items"]["$"]["total"][0]);
-            resolve(resultCount > 0 ? title : "none");
-          }
-        });
+        try {
+          parseString(data, (err, Eresult) => {
+            if (err) {
+              reject(err);
+            } else {
+              const resultCount = parseInt(Eresult["items"]["$"]["total"][0]);
+              resolve(resultCount > 0 ? title : "none");
+            }
+          });
+        } catch (error) {
+          resolve("none")
+        }
       });
     })
   );

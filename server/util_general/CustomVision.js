@@ -19,8 +19,8 @@ const predictorClient = new PredictionAPIClient(
 async function customVision(image) {
   const imageData = fs.readFileSync(image);
   const imageDimensions = sizeOf(imageData);
-  const imageWidth = imageDimensions.width;
-  const imageHeight = imageDimensions.height;
+  let imageHeight = imageDimensions.width;
+  let imageWidth = imageDimensions.height;
 
   const customVisonResults = await predictorClient.detectImage(
     projectId,
@@ -43,10 +43,10 @@ async function customVision(image) {
       ];
 
       coordinates = {
-        topBorder: boundingBoxResults[0],
-        leftBorder: boundingBoxResults[1],
-        bottomBorder: boundingBoxResults[0] + boundingBoxResults[2],
-        rightBorder: boundingBoxResults[1] + boundingBoxResults[3],
+        leftBorder: boundingBoxResults[0],
+        topBorder: boundingBoxResults[1],
+        rightBorder: boundingBoxResults[0] + boundingBoxResults[2],
+        bottomBorder: boundingBoxResults[1] + boundingBoxResults[3],
       };
       boardgames.push(coordinates);
     }

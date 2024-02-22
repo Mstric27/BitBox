@@ -1,8 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-// This is a test
-
 import ImageCapture from "./public/screens/ImageCapture";
 import CameraView from "./public/camera/Camera";
 import LoadingScreen from "./public/screens/LoadingScreen";
