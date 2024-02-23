@@ -1,7 +1,6 @@
 import {
   View,
   StyleSheet,
-  SafeAreaView,
   Animated,
   Easing,
   Image,
@@ -9,9 +8,10 @@ import {
 } from "react-native";
 import Dice from "./util/dice.png";
 import { useNavigation } from "@react-navigation/native";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import * as FileSystem from "expo-file-system";
 import { LinearGradient } from "expo-linear-gradient";
+import { auth } from "../firebase";
 
 export default function LoadingScreen({ route }) {
   const navigation = useNavigation();
@@ -20,8 +20,9 @@ export default function LoadingScreen({ route }) {
 
   useEffect(() => {
     const uploadImage = async () => {
+      const uid = auth.currentUser.uid
       const file = await FileSystem.uploadAsync(
-        " %here% /image-upload",
+        ` %here% /image-upload/${uid}`,
         uri,
         {
           httpMethod: "POST",

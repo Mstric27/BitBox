@@ -2,8 +2,8 @@ const express = require("express");
 const app = express();
 const fs = require("fs");
 const findBoardgameData = require("./BoardgameData");
-const sharp = require("sharp");
 const path = require("path");
+
 
 app.get("/get-game-data/:param1", async (req, res) => {
   const filename = req.params.param1;
@@ -13,9 +13,9 @@ app.get("/get-game-data/:param1", async (req, res) => {
 
 // This method will save the binary content of the request as a file.
 
-app.post("/image-upload", async (req, res) => {
-  sharp.cache(false);
-  const imageName = Date.now() + ".jpg";
+app.post("/image-upload/:param1", async (req, res) => {
+  const uid = req.params.param1;
+  const imageName = uid + Date.now() + ".jpg";
   const imagePath = path.join(__dirname, "images", "image" + imageName);
   const imageStream = fs.createWriteStream(imagePath);
 
