@@ -39,4 +39,4 @@ npm run server
 ngrok http 3000
 
 
-In the window where you used ngrok, copy the forwarding url and paste it in "./public/screens/LoadingScreen.js" the two locations where this url should be pasted is denoted by " %here% ".
+In the window where you used ngrok, copy the forwarding url and paste it in "./public/screens/LoadingScreen.js" and "./public.screens/Search.js" - the four locations where this url should be pasted is denoted by " %here% ".
