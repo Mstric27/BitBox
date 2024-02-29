@@ -150,7 +150,7 @@ export default function Search() {
       setLoading(false)
     } else {
       const searchResults = await fetch(
-        ` %here% /${query}`
+        ` %here% /general-search/${query}`
       );
   
       const results = await searchResults.json()
