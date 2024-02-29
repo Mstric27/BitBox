@@ -1,8 +1,6 @@
 const getTextData = require("./TextData");
 
 const sortTextData = (boardgames, unsortedTextData) => {
-  console.log(boardgames)
-  console.log('----------------------')
   const sortedTextList = [];
   boardgames.forEach((boardgame) => {
     let textForBoardGame = [];
@@ -27,7 +25,6 @@ const sortTextData = (boardgames, unsortedTextData) => {
       sortedTextList.push(textForBoardGame);
     }
   });
-  console.log(sortedTextList);
   return sortedTextList;
 };
 

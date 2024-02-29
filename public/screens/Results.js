@@ -7,34 +7,100 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
+import { auth, db } from "../firebase";
+import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
+import { Ionicons } from "@expo/vector-icons";
 
 const Results = ({ route }) => {
-  const [hasResults, setHasResults] = useState(null);
+  const [hasResults, setHasResults] = useState(true);
+  const [resultData, setResultData] = useState(null);
+  const [inCollection, setInCollection] = useState(null);
+  const [collectionStatus, setCollectionStatus] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
+  const uid = auth.currentUser.uid;
 
   const { resultList } = route.params;
 
   useEffect(() => {
-    if (resultList.length == 0) {
-      setHasResults(false);
-    } else {
-      setHasResults(true);
-    }
+    const getResultData = async (resultList) => {
+      const checkIfExists = async (id) => {
+        const ref = await getDoc(doc(db, uid, id));
+        const exists = ref.exists();
+        return exists;
+      };
+
+      const existsDict = {};
+      const data = [];
+      for await (const boardgame of resultList) {
+        const image = boardgame["image"][0];
+        let name = boardgame["name"][0]["$"]["value"];
+        const id = boardgame["$"]["id"];
+        const link = "https://boardgamegeek.com/boardgame/" + id + "/" + name;
+
+        name = name.split("%20");
+        name = name.join();
+
+        const exists = await checkIfExists(id);
+        existsDict[id] = exists;
+
+        const boardgameDict = {
+          image: image,
+          name: name,
+          id: id,
+          link: link,
+        };
+        data.push(boardgameDict);
+      }
+      if (resultList.length == 0) {
+        setHasResults(false);
+      } else {
+        setInCollection(existsDict);
+        setCollectionStatus(existsDict);
+        setResultData(data);
+        setHasResults(true);
+      }
+    };
+
+    getResultData(resultList);
   }, [resultList]);
 
-  const renderItem = (boardgame) => {
-    const image = boardgame["item"]["image"][0];
-    let name = boardgame["item"]["name"][0]["$"]["value"];
-    const id = boardgame["item"]["$"]["id"];
-    const link = "https://boardgamegeek.com/boardgame/" + id + "/" + name;
-    const index = boardgame["index"];
+  const updateDbAndExit = async () => {
+    setLoading(true);
+    for await (const boardgame of resultData) {
+      if (inCollection[boardgame["id"]]) {
+        if (
+          inCollection[boardgame["id"]] != collectionStatus[boardgame["id"]]
+        ) {
+          await deleteDoc(doc(db, uid, boardgame["id"]));
+          console.log(
+            `Deleted "${boardgame["name"]}" from "${uid}" Collection`
+          );
+        }
+      } else {
+        if (
+          inCollection[boardgame["id"]] != collectionStatus[boardgame["id"]]
+        ) {
+          await setDoc(doc(db, uid, boardgame["id"]), {
+            name: boardgame["name"],
+            image: boardgame["image"],
+            link: boardgame["link"],
+          });
+          console.log(`Added "${boardgame["name"]}" to "${uid}" Collection`);
+        }
+      }
+    }
+    navigation.navigate("ImageCapture");
+  };
 
-    name = name.split("%20");
-    name = name.join();
+  const renderItem = (object) => {
+    const index = object["index"];
+    const boardgame = object["item"];
 
     return (
       <View
@@ -51,13 +117,121 @@ const Results = ({ route }) => {
           },
         ]}
       >
-        <View style={{ flexDirection: "column", flex: 1 }}>
+        <View style={{ flexDirection: "row" }}>
+          {inCollection[boardgame["id"]] && (
+            <View style={{ flex: 1, flexDirection: "row" }}>
+              <View style={{ flex: 1 }}></View>
+              <View
+                style={{
+                  flex: 3,
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 25,
+                    fontStyle: "italic",
+                    color: "white",
+                    textAlign: "center",
+                  }}
+                >
+                  Remove from BitBox
+                </Text>
+              </View>
+              <View style={{ flex: 1, padding: 8 }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    setCollectionStatus({
+                      ...collectionStatus,
+                      [boardgame["id"]]: !collectionStatus[boardgame["id"]],
+                    })
+                  }
+                >
+                  {collectionStatus[boardgame["id"]] ==
+                    inCollection[boardgame["id"]] && (
+                    <View style={{ flex: 1 }}>
+                      <Ionicons
+                        name="close-circle-outline"
+                        size={75}
+                        color="white"
+                      />
+                    </View>
+                  )}
+                  {collectionStatus[boardgame["id"]] !=
+                    inCollection[boardgame["id"]] && (
+                    <View style={{ flex: 1 }}>
+                      <Ionicons name="close-circle" size={75} color="white" />
+                    </View>
+                  )}
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+          {!inCollection[boardgame["id"]] && (
+            <View style={{ flex: 1, flexDirection: "row" }}>
+              <View style={{ flex: 1 }}></View>
+              <View
+                style={{
+                  flex: 3,
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text
+                  style={{ fontSize: 25, fontStyle: "italic", color: "white" }}
+                >
+                  Add to BitBox
+                </Text>
+              </View>
+              <View style={{ flex: 1, padding: 8 }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    setCollectionStatus({
+                      ...collectionStatus,
+                      [boardgame["id"]]: !collectionStatus[boardgame["id"]],
+                    })
+                  }
+                >
+                  {collectionStatus[boardgame["id"]] ==
+                    inCollection[boardgame["id"]] && (
+                    <View style={{ flex: 1 }}>
+                      <Ionicons
+                        name="checkmark-circle-outline"
+                        size={75}
+                        color="white"
+                      />
+                    </View>
+                  )}
+                  {collectionStatus[boardgame["id"]] !=
+                    inCollection[boardgame["id"]] && (
+                    <View style={{ flex: 1 }}>
+                      <Ionicons
+                        name="checkmark-circle"
+                        size={75}
+                        color="white"
+                      />
+                    </View>
+                  )}
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        </View>
+        <View style={{ flexDirection: "column", flex: 2 }}>
           <Text style={styles.title}>Boardgame {index + 1}:</Text>
-          <Text style={styles.title}>{name}</Text>
+          <Text style={styles.title}>{boardgame["name"]}</Text>
         </View>
         <Image
-          source={{ uri: image }}
-          style={{ width: "100%", height: 500, resizeMode: "stretch" }}
+          source={{ uri: boardgame["image"] }}
+          style={{
+            width: "100%",
+            height: 500,
+            resizeMode: "stretch",
+            marginTop: 10,
+          }}
         />
         <Text
           style={{
@@ -66,7 +240,7 @@ const Results = ({ route }) => {
             fontStyle: "italic",
             marginBottom: 10,
           }}
-          onPress={() => Linking.openURL(link)}
+          onPress={() => Linking.openURL(boardgame["link"])}
         >
           This is the BGG link
         </Text>
@@ -105,7 +279,7 @@ const Results = ({ route }) => {
               <View style={{ flex: 15 }}>
                 <FlatList
                   style={{ flex: 1 }}
-                  data={resultList}
+                  data={resultData}
                   renderItem={renderItem}
                 />
               </View>
@@ -153,7 +327,7 @@ const Results = ({ route }) => {
             <TouchableOpacity
               style={{ flex: 1, alignContent: "center" }}
               onPress={() => {
-                navigation.navigate("ImageCapture");
+                updateDbAndExit();
               }}
             >
               <Text
@@ -163,11 +337,25 @@ const Results = ({ route }) => {
                   fontWeight: "bold",
                 }}
               >
-                Exit
+                Update and Exit
               </Text>
             </TouchableOpacity>
           </View>
         </View>
+        {loading && (
+          <View
+            style={[
+              StyleSheet.absoluteFill,
+              {
+                backgroundColor: "rgba(82,106,135,.8)",
+                alignItems: "center",
+                justifyContent: "center",
+              },
+            ]}
+          >
+            <ActivityIndicator color="#fff" animating size="large" />
+          </View>
+        )}
       </SafeAreaView>
     </LinearGradient>
   );
@@ -184,7 +372,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 40,
     fontWeight: "bold",
-    marginTop: 5,
     color: "white",
     textAlign: "center",
     flexWrap: "wrap",

@@ -6,6 +6,8 @@ import CameraView from "./public/camera/Camera";
 import LoadingScreen from "./public/screens/LoadingScreen";
 import Results from "./public/screens/Results";
 import SignIn from "./public/screens/SignIn";
+import Home from "./public/screens/Home";
+import Search from "./public/screens/Search";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +19,11 @@ export default function App() {
           options={{ headerShown: false }}
           name="SignIn"
           component={SignIn}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Home"
+          component={Home}
         />
         <Stack.Screen
           options={{ headerShown: false }}
@@ -37,6 +44,11 @@ export default function App() {
           options={{ headerShown: false }}
           name="Results"
           component={Results}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Search"
+          component={Search}
         />
       </Stack.Navigator>
     </NavigationContainer>

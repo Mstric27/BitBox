@@ -23,7 +23,7 @@ const SignIn = () => {
       .then((userCredentials) => {
         const user = userCredentials.user;
         console.log("Registered with:", user.email);
-        navigation.navigate("ImageCapture");
+        navigation.replace("Home");
       })
       .catch((error) => alert(error.message));
   };
@@ -34,7 +34,7 @@ const SignIn = () => {
       .then((userCredentials) => {
         const user = userCredentials.user;
         console.log("Logged in with:", user.email);
-        navigation.navigate("ImageCapture");
+        navigation.replace("Home");
       })
       .catch((error) => alert(error.message));
   };

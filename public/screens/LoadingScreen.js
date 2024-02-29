@@ -1,11 +1,4 @@
-import {
-  View,
-  StyleSheet,
-  Animated,
-  Easing,
-  Image,
-  Text,
-} from "react-native";
+import { View, StyleSheet, Animated, Easing, Image, Text } from "react-native";
 import Dice from "./util/dice.png";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
@@ -20,7 +13,7 @@ export default function LoadingScreen({ route }) {
 
   useEffect(() => {
     const uploadImage = async () => {
-      const uid = auth.currentUser.uid
+      const uid = auth.currentUser.uid;
       const file = await FileSystem.uploadAsync(
         ` %here% /image-upload/${uid}`,
         uri,

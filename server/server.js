@@ -3,7 +3,8 @@ const app = express();
 const fs = require("fs");
 const findBoardgameData = require("./BoardgameData");
 const path = require("path");
-
+const generalSearch = require("./bgg_api/GeneralSearch");
+const generalStats = require("./bgg_api/GeneralStats");
 
 app.get("/get-game-data/:param1", async (req, res) => {
   const filename = req.params.param1;
@@ -26,6 +27,22 @@ app.post("/image-upload/:param1", async (req, res) => {
   imageStream.on("finish", () => {
     res.send(imageName);
   });
+});
+
+// This will search the BGG API and return the results
+
+app.get("/general-search/:param1", async (req, res) => {
+  const searchQuery = req.params.param1;
+  const results = await generalSearch(searchQuery)
+  res.json(results);
+});
+
+// This will search the BGG API and return the stats of a specifc board game
+
+app.get("/general-stats/:param1", async (req, res) => {
+  const id = req.params.param1;
+  const results = await generalStats(id)
+  res.json(results);
 });
 
 app.listen(3000, () => {

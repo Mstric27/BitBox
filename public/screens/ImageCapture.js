@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   Image,
   SafeAreaView,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import * as FileSystem from "expo-file-system";
 
@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+
 export default function ImageCapture() {
   const [image, setImage] = useState(null);
   const [imageCaptured, setImageCaptured] = useState(false);
@@ -63,123 +64,187 @@ export default function ImageCapture() {
       }}
       style={{ flex: 1 }}
     >
-      <SafeAreaView style={styles.container}>
-        {!imageCaptured && (
-          <ScrollView style={{flex : 1}}>
-            <View style={{ paddingVertical: 30 }}>
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontSize: 25,
-                  fontWeight: "500",
-                  fontStyle: "italic",
+      {!imageCaptured && (
+        <View style={{ flex: 1 }}>
+          <SafeAreaView style={{ flex: 13, gap: 20 }}>
+            <View style={{ flex: 12 }}>
+              <ScrollView style={{ flex: 1 }}>
+                <View style={{ paddingVertical: 30 }}>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                      fontSize: 25,
+                      fontWeight: "500",
+                      fontStyle: "italic",
+                    }}
+                  >
+                    find your boardgames with
+                  </Text>
+                  <Text style={styles.title}>BitBox</Text>
+
+                  <View style={styles.miniContain}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        marginTop: 10,
+                        marginBottom: 3,
+                      }}
+                    >
+                      Follow these guidelines for best results:
+                    </Text>
+                    <Text style={styles.guidlines}>
+                      1.) Make sure your picture is in portrait mode, well lit,
+                      and in focus
+                    </Text>
+                    <Text style={styles.guidlines}>
+                      2.) Line up the edges of each boardgame in the image with
+                      the gridlines provided
+                    </Text>
+                    <Text style={styles.guidlines}>
+                      3.) Make sure only one side of the boardgame is shown to
+                      the camera (strictly a top view or a side view)
+                    </Text>
+                    <Text style={styles.guidlines}>
+                      4.) Make sure you show a side of the boardgame that has
+                      the title
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        marginTop: 10,
+                      }}
+                    >
+                      Things to note:
+                    </Text>
+                    <Text
+                      style={{
+                        paddingHorizontal: 20,
+                        marginVertical: 5,
+                        fontSize: 16,
+                        textAlign: "center",
+                      }}
+                    >
+                      BitBox identifies the location of each board game and
+                      analyzes the text found on each box. If the design of the
+                      board game's title is too unique or the image is not in
+                      focus, BitBox may not be able to accurately identify the
+                      title.
+                    </Text>
+                    <Text
+                      style={{
+                        paddingHorizontal: 20,
+                        marginVertical: 2,
+                        fontSize: 16,
+                        textAlign: "center",
+                      }}
+                    >
+                      While in theory BitBox could identify a multitude of
+                      boardgames in a single image (assuming all of the
+                      guidlines above are met), it is recommended that an image
+                      does not have more than five boardgames.
+                    </Text>
+                    <TouchableOpacity
+                      style={{
+                        backgroundColor: "white",
+                        borderRadius: 10,
+                        marginTop: 20,
+                      }}
+                      onPress={() => goToCamera()}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 25,
+                          paddingHorizontal: 10,
+                          paddingVertical: 5,
+                        }}
+                      >
+                        Get Started
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </ScrollView>
+            </View>
+          </SafeAreaView>
+          <SafeAreaView
+            style={{
+              flex: 1.2,
+              backgroundColor: "#b8c3ed",
+              flexDirection: "row",
+            }}
+          >
+            <View
+              style={{
+                flex: 1,
+                alignSelf: "center",
+                alignItems: "center",
+                borderRightWidth: 2,
+                borderColor: "#000",
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.replace("Home");
                 }}
               >
-                find your boardgames with
-              </Text>
-              <Text style={styles.title}>BitBox</Text>
-
-              <View style={styles.miniContain}>
-                <Text
-                  style={{
-                    fontSize: 20,
-                    fontWeight: "bold",
-                    marginTop: 10,
-                    marginBottom: 3,
-                  }}
-                >
-                  Follow these guidelines for best results:
-                </Text>
-                <Text style={styles.guidlines}>
-                  1.) Make sure your picture is in portrait mode, well lit, and in
-                  focus
-                </Text>
-                <Text style={styles.guidlines}>
-                  2.) Line up the edges of each boardgame in the image with the
-                  gridlines provided
-                </Text>
-                <Text style={styles.guidlines}>
-                  3.) Make sure only one side of the boardgame is shown to the
-                  camera (strictly a top view or a side view)
-                </Text>
-                <Text style={styles.guidlines}>
-                  4.) Make sure you show a side of the boardgame that has the
-                  title
-                </Text>
-                <Text style={{ fontSize: 20, fontWeight: "bold", marginTop: 10 }}>
-                  Things to note:
-                </Text>
-                <Text
-                  style={{
-                    paddingHorizontal: 20,
-                    marginVertical: 5,
-                    fontSize: 16,
-                    textAlign: "center",
-                  }}
-                >
-                  BitBox identifies the location of each board game and analyzes
-                  the text found on each box. If the design of the board game's
-                  title is too unique or the image is not in focus, BitBox may not
-                  be able to accurately identify the title.
-                </Text>
-                <Text
-                  style={{
-                    paddingHorizontal: 20,
-                    marginVertical: 2,
-                    fontSize: 16,
-                    textAlign: "center",
-                  }}
-                >
-                  While in theory BitBox could identify a multitude of boardgames
-                  in a single image (assuming all of the guidlines above are met),
-                  it is recommended that an image does not have more than five
-                  boardgames.
-                </Text>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "white",
-                    borderRadius: 10,
-                    marginTop: 20,
-                  }}
-                  onPress={() => goToCamera()}
-                >
-                  <Text
-                    style={{
-                      fontSize: 25,
-                      paddingHorizontal: 10,
-                      paddingVertical: 5,
-                    }}
-                  >
-                    Get Started
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    borderColor: "white",
-                    borderWidth: 3,
-                    borderRadius: 10,
-                    marginTop: 25,
-                  }}
-                  onPress={() => {
-                    navigation.replace("SignIn");
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      paddingHorizontal: 10,
-                      paddingVertical: 5,
-                    }}
-                  >
-                    Sign Out
-                  </Text>
-                </TouchableOpacity>
-              </View>
+                <Ionicons name="book" size={40} color="#FEFEFE" />
+              </TouchableOpacity>
             </View>
-          </ScrollView>
-        )}
-
-        {imageCaptured && (
+            <View
+              style={{
+                flex: 1,
+                alignSelf: "center",
+                alignItems: "center",
+                borderRightWidth: 2,
+                borderColor: "#000",
+              }}
+            >
+              <TouchableOpacity>
+                <Ionicons name="aperture" size={40} color="rgba(00,00,00,.5)" />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                alignSelf: "center",
+                alignItems: "center",
+                borderRightWidth: 2,
+                borderColor: "#000",
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.replace("Search");
+                }}
+              >
+                <Ionicons name="search" size={40} color="#FEFEFE" />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{ flex: 1, alignSelf: "center", alignItems: "center" }}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.replace("SignIn");
+                }}
+              >
+                <Ionicons
+                  name="exit-outline"
+                  style={{
+                    transform: [{ rotateY: "180deg" }, { rotateX: "180deg" }],
+                  }}
+                  size={40}
+                  color="#FEFEFE"
+                />
+              </TouchableOpacity>
+            </View>
+          </SafeAreaView>
+        </View>
+      )}
+      {imageCaptured && (
+        <SafeAreaView style={styles.container}>
           <View
             style={[
               {
@@ -200,7 +265,11 @@ export default function ImageCapture() {
                   onPress={() => deleteImage(image)}
                 >
                   <View style={styles.buttonContent}>
-                    <Ionicons name="trash-outline" size={25} color="white" />
+                    <Ionicons
+                      name="arrow-undo-outline"
+                      size={25}
+                      color="white"
+                    />
                   </View>
                 </TouchableOpacity>
               </View>
@@ -252,8 +321,8 @@ export default function ImageCapture() {
               <View style={{ flex: 1 }}></View>
             </View>
           </View>
-        )} 
-      </SafeAreaView>
+        </SafeAreaView>
+      )}
     </LinearGradient>
   );
 }

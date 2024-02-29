@@ -58,7 +58,7 @@ async function checkTitles(potentialTitles) {
             }
           });
         } catch (error) {
-          resolve("none")
+          resolve("none");
         }
       });
     })
