@@ -182,7 +182,7 @@ export default function Home() {
                 No Boardgames In Collection
               </Text>
             )}
-            {boardgameCollection > 0 && (
+            {boardgameCollection != 0 && (
               <View style={{ flex: 1 }}>
                 <View style={styles.button}>
                   <TouchableOpacity onPress={() => updateDb()}>
