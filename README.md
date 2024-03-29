@@ -1,6 +1,6 @@
 # BitBox
 
-BitBox is a React Native application that takes an image of a collection of boardgames and identifies all the boardgames shown. This application uses the Microsoft Azure AI Vision services in order to identify the location and text of each boardgame. After it retrieves the boardgame data, it searches through the boardgamegeek.com API and returns the most likely results back to the user. It also uses Firebase authentication and database features to allow the user to add any boardgame they indentify to their own personal online collection.
+BitBox is a React Native application that takes an image of a collection of board games and identifies all the board games shown. This application uses the Microsoft Azure AI Vision services in order to identify the location and text of each board game. After it retrieves the board game data, it searches through the boardgamegeek.com API and returns the most likely results back to the user. It also uses Firebase authentication and database features to allow the user to add any board game they indentify to their own personal online collection.
 
 # Video Demo
 
